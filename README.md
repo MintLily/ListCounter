@@ -47,7 +47,7 @@ ShowAvatarCount - Adds a counter showing how many avatars you've created
     <li><a href="https://github.com/knah">Knah</a> - EnableDisableListener</li>
 </ul>
 
-<h1>Change Log (since Lily's edits)</h1>
+<h1>Change Log</h1>
 <h3>v1.0.0</h3>
 <ul>
 	<li>Initial Release</li>
