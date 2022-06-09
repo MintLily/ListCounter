@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<AssemblyName>ListCounter</AssemblyName>
+		<TargetFramework>net48</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<VRChatPath>C:\Program Files (x86)\Steam\steamapps\common\VRChat</VRChatPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Reference Include="Assembly-CSharp">
+	    <HintPath>$(VRChatPath)\MelonLoader\Managed\Assembly-CSharp.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Il2Cppmscorlib">
+	    <HintPath>$(VRChatPath)\MelonLoader\Managed\Il2Cppmscorlib.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Il2CppSystem">
+	    <HintPath>$(VRChatPath)\MelonLoader\Managed\Il2CppSystem.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Il2CppSystem.Core">
+	    <HintPath>$(VRChatPath)\MelonLoader\Managed\Il2CppSystem.Core.dll</HintPath>
+	  </Reference>
+	  <Reference Include="MelonLoader">
+	    <HintPath>$(VRChatPath)\MelonLoader\MelonLoader.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnhollowerBaseLib">
+	    <HintPath>$(VRChatPath)\MelonLoader\Managed\UnhollowerBaseLib.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnhollowerRuntimeLib">
+	    <HintPath>$(VRChatPath)\MelonLoader\Managed\UnhollowerRuntimeLib.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityEngine">
+	    <HintPath>$(VRChatPath)\MelonLoader\Managed\UnityEngine.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityEngine.CoreModule">
+	    <HintPath>$(VRChatPath)\MelonLoader\Managed\UnityEngine.CoreModule.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityEngine.UI">
+	    <HintPath>$(VRChatPath)\MelonLoader\Managed\UnityEngine.UI.dll</HintPath>
+	  </Reference>
+	  <Reference Include="VRC.UI.Core">
+	    <HintPath>$(VRChatPath)\MelonLoader\Managed\VRC.UI.Core.dll</HintPath>
+	  </Reference>
+	  <Reference Include="VRCCore-Editor">
+	    <HintPath>$(VRChatPath)\MelonLoader\Managed\VRCCore-Editor.dll</HintPath>
+	  </Reference>
+	  <Reference Include="VRCCore-Standalone">
+	    <HintPath>$(VRChatPath)\MelonLoader\Managed\VRCCore-Standalone.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+</Project>
