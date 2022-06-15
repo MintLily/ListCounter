@@ -8,11 +8,6 @@ Current Supported Lists:
             <li>Online Friends</li>
         </ul>
     </li>
-    <li>Avatar
-        <ul>
-            <li>Personal Creations</li>
-        </ul>
-    </li>
 </ul>
 <br>
 
@@ -30,16 +25,13 @@ Game: VRChat build 1205+ *(Until Ui 2.0 is finished)*<br>
 ShowTotalFriends = true
 ShowOnlineFriends = true
 ShowInRoomCount = true
-ShowAvatarCount = true
 ```
 ShowTotalFriends - Adds a counter showing how many of your friends are online<br>
 ShowOnlineFriends - Adds a counter showing how many total friends you have<br>
-ShowInRoomCount - Adds a counter showing how many players are in the current instance<br>
-ShowAvatarCount - Adds a counter showing how many avatars you've created
+ShowInRoomCount - Adds a counter showing how many players are in the current instance
 
 <h3>Preview</h3>
-<img src="https://i.mintlily.lgbt/keVFSEIZwYC6.jpg" alt="Preview1" /><br>
-<img src="https://i.mintlily.lgbt/KXH8SrG5gfZa.jpg" alt="Preview2" />
+<img src="https://i.mintlily.lgbt/keVFSEIZwYC6.jpg" alt="Preview1" />
 
 <h2>Credits</h2>
 <summary>Other Code in the Mod</summary>
@@ -48,6 +40,11 @@ ShowAvatarCount - Adds a counter showing how many avatars you've created
 </ul>
 
 <h1>Change Log</h1>
+<h3>v1.0.1</h3>
+<ul>
+    <li>Removed Personal Creations Counter</li>
+</ul>
+
 <h3>v1.0.0</h3>
 <ul>
 	<li>Initial Release</li>
