@@ -19,59 +19,59 @@ namespace ListCounter;
 internal static class BuildInfo {
     public const string Name = "ListCounter";
     public const string Author = "Lily";
-    public const string Version = "1.0.0";
+    public const string Version = "1.0.1";
     public const string Company = "Minty Labs";
     public const string DownloadLink = "https://github.com/MintLily/ListCounter";
 }
 
 public class Main : MelonMod {
-    private int _totalFriends, _scenesLoaded;
-    private UiUserList _onlineFriendsList;
-    private UiAvatarList _avatarList;
-    private Text _onlineFriendsText, _avatarsText, _inRoomText;
-    private bool _hasLoadedOnUi, _hasOpenedSocialMenu, _hasOpenedAvatarMenu;
+    private static int _totalFriends, _scenesLoaded;
+    private UiUserList? _onlineFriendsList;
+    // private UiAvatarList _avatarList;
+    private Text? _onlineFriendsText, /*_avatarsText,*/ _inRoomText;
+    private bool HasLoadedOnUi, HasOpenedSocialMenu/*, HasOpenedAvatarMenu*/;
     
     #region Mod Logic
     
-    private static IEnumerator UpdateMembersText(Text textObj, UiUserList online, int total) {
+    private static IEnumerator UpdateMembersText(Text? textObj, UiUserList? online, int total) {
         yield return new WaitForSeconds(1);
         if (!_showOnlineFriends!.Value && !_showTotalFriends!.Value) yield break;
         
-        textObj.text = $"Online Friends ({(_showOnlineFriends.Value ? $"{online.field_Private_Int32_0}/" : "")}{(_showTotalFriends!.Value ? $"{total}" : "")})";
+        textObj!.text = $"Online Friends ({(_showOnlineFriends.Value ? $"{online!.field_Private_Int32_0}/" : "")}{(_showTotalFriends!.Value ? $"{total}" : "")})";
     }
     
-    private static IEnumerator UpdateInRoomText(Text textObj) {
+    private static IEnumerator UpdateInRoomText(Text? textObj) {
         yield return new WaitForSeconds(1);
         if (!_showInRoomCount!.Value) yield break;
         
-        textObj.text = $"In Room ({PlayerManager.field_Private_Static_PlayerManager_0.field_Private_List_1_Player_0.Count})";
+        textObj!.text = $"In Room ({PlayerManager.field_Private_Static_PlayerManager_0.field_Private_List_1_Player_0.Count})";
     }
     
-    private static IEnumerator UpdateAvatarsText(Text textObj, UiAvatarList total) {
+    /*private static IEnumerator UpdateAvatarsText(Text textObj, UiAvatarList total) {
         yield return new WaitForSeconds(1);
         if (!_showAvatarCount!.Value) yield break;
         
-        textObj.text = $"Personal Creations ({total.field_Private_Int32_0})";
-    }
+        textObj.text = $"My Creations ({total.field_Private_Dictionary_2_String_ApiAvatar_0.Count})";
+    }*/
     
     private void OnOpenSocialMenu() {
         MelonCoroutines.Start(UpdateMembersText(_onlineFriendsText, _onlineFriendsList, _totalFriends));
         MelonCoroutines.Start(UpdateInRoomText(_inRoomText));
-        _hasOpenedSocialMenu = true;
+        HasOpenedSocialMenu = true;
     }
         
-    private void OnCloseSocialMenu() => _hasOpenedSocialMenu = false;
+    private void OnCloseSocialMenu() => HasOpenedSocialMenu = false;
     
-    private void OnOpenAvatarMenu() {
+    /*private void OnOpenAvatarMenu() {
         MelonCoroutines.Start(UpdateAvatarsText(_avatarsText, _avatarList));
         _hasOpenedAvatarMenu = true;
     }
     
-    private void OnCloseAvatarMenu() => _hasOpenedAvatarMenu = false;
+    private void OnCloseAvatarMenu() => _hasOpenedAvatarMenu = false;*/
 
     private void RegisterListeners() {
         var socialMenu = GameObject.Find("UserInterface/MenuContent/Screens/Social");
-        var avatarMenu = GameObject.Find("UserInterface/MenuContent/Screens/Avatar");
+        // avatarMenu = GameObject.Find("UserInterface/MenuContent/Screens/Avatar");
         
         var socialMenuListener = socialMenu.GetOrAddComponent<EnableDisableListener>();
         socialMenuListener.OnEnabled += OnOpenSocialMenu;
@@ -79,11 +79,11 @@ public class Main : MelonMod {
         
         Debug("Finished Creating Social Menu Listener.");
         
-        var avatarMenuListener = avatarMenu.GetOrAddComponent<EnableDisableListener>();
+        /*var avatarMenuListener = avatarMenu.GetOrAddComponent<EnableDisableListener>();
         avatarMenuListener.OnEnabled += OnOpenAvatarMenu;
         avatarMenuListener.OnDisabled += OnCloseAvatarMenu;
         
-        Debug("Finished Creating Avatar Menu Listener.");
+        Debug("Finished Creating Avatar Menu Listener.");*/
     }
     
     #endregion
@@ -93,7 +93,7 @@ public class Main : MelonMod {
     private bool _isDebug;
     private readonly MelonLogger.Instance _logger = new (BuildInfo.Name, ConsoleColor.Green);
     private static MelonPreferences_Category? _counterList;
-    private static MelonPreferences_Entry<bool>? _showTotalFriends, _showOnlineFriends, _showAvatarCount, _showInRoomCount;
+    private static MelonPreferences_Entry<bool>? _showTotalFriends, _showOnlineFriends, /*_showAvatarCount,*/ _showInRoomCount;
 
     public override void OnApplicationStart() {
         if (MelonDebug.IsEnabled() || Environment.CommandLine.Contains("--cl.debug")) {
@@ -105,7 +105,7 @@ public class Main : MelonMod {
         _showTotalFriends = _counterList.CreateEntry("ShowTotalFriends", true, "Show Total Friends");
         _showOnlineFriends = _counterList.CreateEntry("ShowOnlineFriends", true, "Show Online Friends");
         _showInRoomCount = _counterList.CreateEntry("ShowInRoomCount", true, "Show In Room Count");
-        _showAvatarCount = _counterList.CreateEntry("ShowAvatarCount", true, "Show Avatar Count");
+        //_showAvatarCount = _counterList.CreateEntry("ShowAvatarCount", true, "Show Avatar Count");
         
         bool failed;
         try { ClassInjector.RegisterTypeInIl2Cpp<EnableDisableListener>(); failed = false; }
@@ -126,13 +126,14 @@ public class Main : MelonMod {
         _inRoomText = inRoomListTextObj.GetComponent<Text>();
         Debug("Got In Room List");
         
-        var avatarsList = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Vertical Scroll View/Viewport/Content/Personal Avatar List");
+        /*var avatarsList = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Vertical Scroll View/Viewport/Content/Personal Avatar List");
         var avatarCreationTextObj = GameObject.Find("UserInterface/MenuContent/Screens/Avatar/Vertical Scroll View/Viewport/Content/Personal Avatar List/Button/TitleText");
         _avatarList = avatarsList.GetComponent<UiAvatarList>();
         _avatarsText = avatarCreationTextObj.GetComponent<Text>();
-        Debug("Got Avatar List");
+        Debug("Got Avatar List");*/
+        _logger.Warning("Personal Creation Avatar Count was removed.");
         
-        _hasLoadedOnUi = true;
+        HasLoadedOnUi = true;
     }
 
     public override void OnSceneWasLoaded(int buildIndex, string sceneName) {
