@@ -19,7 +19,7 @@ namespace ListCounter;
 internal static class BuildInfo {
     public const string Name = "ListCounter";
     public const string Author = "Lily";
-    public const string Version = "1.0.1";
+    public const string Version = "1.0.2";
     public const string Company = "Minty Labs";
     public const string DownloadLink = "https://github.com/MintLily/ListCounter";
 }
@@ -29,12 +29,13 @@ public class Main : MelonMod {
     private UiUserList? _onlineFriendsList;
     // private UiAvatarList _avatarList;
     private Text? _onlineFriendsText, /*_avatarsText,*/ _inRoomText;
-    private bool HasLoadedOnUi, HasOpenedSocialMenu/*, HasOpenedAvatarMenu*/;
+    private static bool _hasLoadedOnUi, _hasOpenedSocialMenu/*, HasOpenedAvatarMenu*/, _stillSomehowThrowingAnError;
     
     #region Mod Logic
     
     private static IEnumerator UpdateMembersText(Text? textObj, UiUserList? online, int total) {
         yield return new WaitForSeconds(1);
+        if (_stillSomehowThrowingAnError) yield break;
         if (!_showOnlineFriends!.Value && !_showTotalFriends!.Value) yield break;
         
         textObj!.text = $"Online Friends ({(_showOnlineFriends.Value ? $"{online!.field_Private_Int32_0}/" : "")}{(_showTotalFriends!.Value ? $"{total}" : "")})";
@@ -42,6 +43,7 @@ public class Main : MelonMod {
     
     private static IEnumerator UpdateInRoomText(Text? textObj) {
         yield return new WaitForSeconds(1);
+        if (_stillSomehowThrowingAnError) yield break;
         if (!_showInRoomCount!.Value) yield break;
         
         textObj!.text = $"In Room ({PlayerManager.field_Private_Static_PlayerManager_0.field_Private_List_1_Player_0.Count})";
@@ -57,10 +59,10 @@ public class Main : MelonMod {
     private void OnOpenSocialMenu() {
         MelonCoroutines.Start(UpdateMembersText(_onlineFriendsText, _onlineFriendsList, _totalFriends));
         MelonCoroutines.Start(UpdateInRoomText(_inRoomText));
-        HasOpenedSocialMenu = true;
+        _hasOpenedSocialMenu = true;
     }
         
-    private void OnCloseSocialMenu() => HasOpenedSocialMenu = false;
+    private void OnCloseSocialMenu() => _hasOpenedSocialMenu = false;
     
     /*private void OnOpenAvatarMenu() {
         MelonCoroutines.Start(UpdateAvatarsText(_avatarsText, _avatarList));
@@ -113,8 +115,8 @@ public class Main : MelonMod {
         if (!failed) Debug("Finished setting up EnableDisableListener");
     }
     
-    private IEnumerator DoTheUi() {
-        yield return new WaitForSeconds(2);
+    private IEnumerator DoTheUi(float timer) {
+        yield return new WaitForSeconds(timer);
         var onlineFriendsViewport = GameObject.Find("UserInterface/MenuContent/Screens/Social/Vertical Scroll View/Viewport/Content/OnlineFriends");
         var friendsListTextObj = GameObject.Find("UserInterface/MenuContent/Screens/Social/Vertical Scroll View/Viewport/Content/OnlineFriends/Button/TitleText");
         _totalFriends = APIUser.CurrentUser.friendIDs._size;
@@ -133,7 +135,7 @@ public class Main : MelonMod {
         Debug("Got Avatar List");*/
         _logger.Warning("Personal Creation Avatar Count was removed.");
         
-        HasLoadedOnUi = true;
+        _hasLoadedOnUi = true;
     }
 
     public override void OnSceneWasLoaded(int buildIndex, string sceneName) {
@@ -143,7 +145,20 @@ public class Main : MelonMod {
         
         RegisterListeners();
 
-        MelonCoroutines.Start(DoTheUi());
+        try {
+            MelonCoroutines.Start(DoTheUi(2f)); // try it
+        }
+        catch (Exception ex) {
+            try {
+                Log("Oops, I failed, let's try that again in 5 seconds.");
+                MelonCoroutines.Start(DoTheUi(5f)); // failed? let's wait a little bit and try again
+            }
+            catch (Exception ex2) {
+                _stillSomehowThrowingAnError = true; // still failing, ok, lets stop and not continue throwing errors
+                _logger.Error($"Exception #1:\n{ex}");
+                _logger.Error($"Exception #2:\n{ex2}");
+            }
+        }
     }
 
     #endregion

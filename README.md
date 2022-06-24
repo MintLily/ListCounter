@@ -40,6 +40,11 @@ ShowInRoomCount - Adds a counter showing how many players are in the current ins
 </ul>
 
 <h1>Change Log</h1>
+<h3>v1.0.2</h3>
+<ul>
+    <li>Catching errors to do the thing again, less errors are nice to have</li>
+</ul>
+
 <h3>v1.0.1</h3>
 <ul>
     <li>Removed Personal Creations Counter</li>
